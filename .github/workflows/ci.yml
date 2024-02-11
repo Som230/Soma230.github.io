@@ -1,37 +1,16 @@
-name: Deploy GitHub Pages
+name: Jekyll
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: [pull_request]
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 2.7
-
-    - name: Install bundler
-      run: gem install bundler -v 2.4.22
-
-    - name: Install dependencies
-      run: |
-        bundle _2.4.22_ install --path vendor/bundle --clean --jobs 4 --retry 3
-
-    - name: Build website
-      run: bundle exec jekyll build
-
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./_site
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          ruby-version: 2.7
+      - name: Jekyll build
+        run: | 
+          bundle exec jekyll build
