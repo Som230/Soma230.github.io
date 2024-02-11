@@ -18,12 +18,14 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 2.4.22
+        ruby-version: 2.7
+
+    - name: Install bundler
+      run: gem install bundler -v 2.4.22
 
     - name: Install dependencies
       run: |
-        gem install bundler
-        bundle install
+        bundle _2.4.22_ install --path vendor/bundle --clean --jobs 4 --retry 3
 
     - name: Build website
       run: bundle exec jekyll build
@@ -33,4 +35,3 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./_site
-
